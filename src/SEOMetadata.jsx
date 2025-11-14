@@ -1,33 +1,30 @@
-import { Helmet } from 'react-helmet-async'
+import { createContext, useContext } from "react";
+export const SEOContext = createContext(null);
 
 export default function SEOMetadata({
-  title,
-  description,
-  image,
-  url,
+  title = "",
+  description = "",
+  keywords = "",
+  image = "",
+  url = "",
   type = "website",
   twitterCard = "summary_large_image",
-  siteName = "My Vite SSR App"
+  children
 }) {
-  return (
-    <Helmet>
-      {/* Basic */}
-      <title>{title}</title>
-      <meta name="description" content={description} />
+  const setSEO = useContext(SEOContext);
 
-      {/* Open Graph */}
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:image" content={image} />
-      <meta property="og:type" content={type} />
-      <meta property="og:url" content={url} />
-      <meta property="og:site_name" content={siteName} />
+  if (setSEO) {
+    setSEO({
+      title,
+      description,
+      keywords,
+      image,
+      url,
+      type,
+      twitterCard,
+      extra: children || ""
+    });
+  }
 
-      {/* Twitter */}
-      <meta name="twitter:card" content={twitterCard} />
-      <meta name="twitter:title" content={title} />
-      <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={image} />
-    </Helmet>
-  )
+  return null;
 }
